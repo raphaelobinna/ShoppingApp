@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { Product } = require("../models/Product");
+const imageToBase64 = require('image-to-base64');
 
 const { auth } = require("../middleware/auth");
 
@@ -45,12 +46,51 @@ router.post("/uploadImage", auth, (req, res) => {
 
 router.post("/uploadProduct", auth, (req, res) => {
 
+    const { writer, title, description, price, continents, Image } = req.body
+
+    console.log('my image', Image)
+
+    var i;
+    let images = []
+        for (i = 0; i < Image.length; i++) {
+            console.log(Image[i])
+            imageToBase64(`${Image[i]}`) // Path to the image
+            .then(
+                (response) => {
+                    //console.log(response); // "cGF0aC90by9maWxlLmpwZw=="
+                    images.push(response)
+                    console.log(images)
+
+                    if(images.length > 1) {
+                        Product.create({
+                            writer,
+                            title,
+                            description,
+                            price,
+                            continents,
+                            images
+                        })
+                        res.status(200).json({ success: true })
+                    }
+                }
+            )
+            .catch(
+                (error) => {
+                    console.log(error); // Logs an error if there was one
+                    res.status(400).json({ success: false, error })
+                }
+            )
+   
+        }
+       // console.log(timmy)
+
+
     //save all data we got from client into the DB
-    const product = new Product(req.body)
-        product.save((err) => {
-            if(err) return res.status(400).json({ success: false, err })
-            return res.status(200).json({ success: true })
-        })
+    // const product = new Product(req.body)
+    //     product.save((err) => {
+    //         if(err) return res.status(400).json({ success: false, err })
+    //         return res.status(200).json({ success: true })
+    //     })
 
 });
 

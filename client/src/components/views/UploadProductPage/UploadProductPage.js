@@ -54,7 +54,7 @@ function UploadProductPage(props) {
             title: TitleValue,
             description: DescriptionValue,
             price: PriceValue,
-            images: Images,
+            Image: Images,
             continents: ContinentValue,
         }
 

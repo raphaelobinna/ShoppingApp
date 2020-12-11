@@ -19,8 +19,8 @@ function ProductImage(props) {
 
             props.detail.images && props.detail.images.map(item => {
                 images.push({
-                    original: `${appURI}/${item}`,
-                    thumbnail: `${appURI}/${item}`
+                    original: `data:image/png;base64,${item}`,
+                    thumbnail: `data:image/png;base64,${item}`
                 })
             })
             setImages(images)
